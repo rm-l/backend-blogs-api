@@ -1,22 +1,32 @@
 const jwt = require('jsonwebtoken');
-const usersService = require('../services/users.service');
+const newUserService = require('../services/newUser.service');
+const userService = require('../services/users.service');
 
 const { JWT_SECRET } = process.env;
 
-const login = async (req, res) => {
-  const { email, password } = req.body;
+const register = async (req, res) => {
+    const { type, message } = await newUserService.register(req.body);
+    const { email, displayName, image } = req.body;
+    if (type) {
+        return res.status(409).json({ message });
+    }
 
-  const { type, message } = await usersService.login(email, password);
-  if (type) return res.status(type).json({ message });
+    const payload = {
+        displayName,
+        email,
+        image,
+    };
 
-  const payload = {
-    email: req.body.email,
-  };
-
-  const token = jwt.sign(payload, JWT_SECRET);
-  return res.status(200).json({ token });
+    const token = jwt.sign(payload, JWT_SECRET);
+    return res.status(201).json({ token });
 };
 
+const getAll = async (_req, res) => {
+    const users = await userService.getAll();
+    return res.status(200).json(users);
+  };
+
 module.exports = {
-  login,
+    register,
+    getAll,
 };
