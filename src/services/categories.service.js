@@ -6,6 +6,13 @@ const register = async (name) => {
   return { type: null, message: newCategory };
 };
 
+const getAll = async () => {
+    const result = await Category.findAll();
+  
+    return { type: null, message: result };
+  };
+
 module.exports = {
   register,
+  getAll,
 };
