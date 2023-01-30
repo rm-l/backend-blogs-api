@@ -18,16 +18,17 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        foreignKey: true,
         references: {
           model: 'users',
           key: 'id',
         },
       },
       published: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW
       },
       updated: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.NOW
       }
     });
   },
